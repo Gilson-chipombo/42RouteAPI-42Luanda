@@ -1,4 +1,4 @@
-/*
+
 import { FastifyInstance } from 'fastify';
 export interface Cadete {
     id: number;
@@ -8,4 +8,3 @@ export interface Cadete {
     passwrd: string; 
     created_at: Date;
 }
-*/
