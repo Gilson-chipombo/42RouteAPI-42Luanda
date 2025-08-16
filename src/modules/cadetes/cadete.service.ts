@@ -25,5 +25,16 @@ export const cadeteService = {
         return prisma.cadetes.delete({
             where: {id}
         });
-    }
+    },
+    
+    findByUsernameOrEmail(usernameOrEmail: string) {
+    return prisma.cadetes.findFirst({
+      where: {
+        OR: [
+          { username: usernameOrEmail },
+          { email: usernameOrEmail }
+        ]
+      }
+    })
+  }
 };
