@@ -3,9 +3,12 @@ import cors from "@fastify/cors";
 import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
 import prismaPlugin from "./plugins/prisma";
+import cadeteRoutes from "./modules/cadetes/cadete.routes";
 
 export async function buildApp() {
-  const app = Fastify({ logger: true })
+  const app = Fastify({ logger: {
+    level: 'error'
+  } })
 
   await app.register(cors, { origin: '*' })
 
@@ -24,6 +27,7 @@ export async function buildApp() {
   })
 
   await app.register(prismaPlugin)
+  app.register(cadeteRoutes, { prefix: '/42route-api' })
 
   return app
 }
