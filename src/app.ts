@@ -25,8 +25,8 @@ export async function buildApp() {
   })
 
   await app.register(swaggerUI, {
-    routePrefix: '/docs',
-    uiConfig: { docExpansion: 'full' },
+    routePrefix: '/api/docs',
+    uiConfig: { docExpansion: 'list' },
   })
 
   await app.register(prismaPlugin)
