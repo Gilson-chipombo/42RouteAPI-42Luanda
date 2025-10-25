@@ -60,7 +60,7 @@ export async function buildApp() {
         }
       });
     }
-
+    
     app.addSchema({
       $id: name,
       ...(schema as Record<string, any>),
