@@ -2,6 +2,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator jsonSchema {
+  provider = "prisma-json-schema-generator"
+  output   = "../schemas"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -9,58 +14,54 @@ datasource db {
 
 model Admins {
   id        Int     @id @default(autoincrement())
-  full_name String? 
+  full_name String?
   username  String? @unique
   email     String? @unique
   passwrd   String?
 }
 
 model Cadetes {
-  id        Int     @id @default(autoincrement())
+  id        Int          @id @default(autoincrement())
   full_name String?
-  username  String? @unique
-  email     String? @unique
+  username  String?      @unique
+  email     String?      @unique
   city      String?
   distrit   String?
   passwrd   String?
   phone     Int?
   stop_id   Int?
-
   stop      MiniBusStop? @relation(fields: [stop_id], references: [id])
-  messages  Message[]     @relation("CadeteMessages")
+  messages  Message[]    @relation("CadeteMessages")
 }
 
 model Drivers {
-  id        Int     @id @default(autoincrement())
-  full_name String?
-  username  String? @unique
-  email     String? @unique
-  passwrd   String?
-  photo     String?
-  phone     Int?
-
-  messages      Message[]           @relation("DriverMessages")
-  coordinates   DriverCoordinates[]
+  id          Int                 @id @default(autoincrement())
+  full_name   String?
+  username    String?             @unique
+  email       String?             @unique
+  passwrd     String?
+  photo       String?
+  phone       Int?
+  coordinates DriverCoordinates[]
+  messages    Message[]           @relation("DriverMessages")
 }
 
 model MiniBusStop {
-  id        Int     @id @default(autoincrement())
-  stop_name String? @unique
+  id        Int       @id @default(autoincrement())
+  stop_name String?   @unique
   distrit   String?
   latitude  Float?
   longitude Float?
-
   cadetes   Cadetes[]
 }
 
 model Message {
-  id         Int      @id @default(autoincrement())
-  id_driver  Int
-  id_cadete  Int
-  message    String
-
-  driver     Drivers @relation("DriverMessages", fields: [id_driver], references: [id])
-  cadete     Cadetes @relation("CadeteMessages", fields: [id_cadete], references: [id])
+  id        Int     @id @default(autoincrement())
+  id_driver Int
+  id_cadete Int
+  message   String
+  cadete    Cadetes @relation("CadeteMessages", fields: [id_cadete], references: [id])
+  driver    Drivers @relation("DriverMessages", fields: [id_driver], references: [id])
 }
 
 model DriverCoordinates {
@@ -68,6 +69,5 @@ model DriverCoordinates {
   lat       Float
   long      Float
   id_driver Int
-
   driver    Drivers @relation(fields: [id_driver], references: [id])
 }

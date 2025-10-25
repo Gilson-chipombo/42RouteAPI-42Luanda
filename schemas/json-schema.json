@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "Admins": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "full_name": { "type": ["string", "null"] },
+        "username": { "type": ["string", "null"] },
+        "email": { "type": ["string", "null"] },
+        "passwrd": { "type": ["string", "null"] }
+      }
+    },
+    "Cadetes": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "full_name": { "type": ["string", "null"] },
+        "username": { "type": ["string", "null"] },
+        "email": { "type": ["string", "null"] },
+        "city": { "type": ["string", "null"] },
+        "distrit": { "type": ["string", "null"] },
+        "passwrd": { "type": ["string", "null"] },
+        "phone": { "type": ["integer", "null"] },
+        "stop": {
+          "anyOf": [
+            { "$ref": "#/definitions/MiniBusStop" },
+            { "type": "null" }
+          ]
+        },
+        "messages": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Message" }
+        }
+      }
+    },
+    "Drivers": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "full_name": { "type": ["string", "null"] },
+        "username": { "type": ["string", "null"] },
+        "email": { "type": ["string", "null"] },
+        "passwrd": { "type": ["string", "null"] },
+        "photo": { "type": ["string", "null"] },
+        "phone": { "type": ["integer", "null"] },
+        "messages": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Message" }
+        },
+        "coordinates": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/DriverCoordinates" }
+        }
+      }
+    },
+    "MiniBusStop": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "stop_name": { "type": ["string", "null"] },
+        "distrit": { "type": ["string", "null"] },
+        "latitude": { "type": ["number", "null"] },
+        "longitude": { "type": ["number", "null"] },
+        "cadetes": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Cadetes" }
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "message": { "type": "string" },
+        "driver": { "$ref": "#/definitions/Drivers" },
+        "cadete": { "$ref": "#/definitions/Cadetes" }
+      }
+    },
+    "DriverCoordinates": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "lat": { "type": "number" },
+        "long": { "type": "number" },
+        "driver": { "$ref": "#/definitions/Drivers" }
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "admins": { "$ref": "#/definitions/Admins" },
+    "cadetes": { "$ref": "#/definitions/Cadetes" },
+    "drivers": { "$ref": "#/definitions/Drivers" },
+    "miniBusStop": { "$ref": "#/definitions/MiniBusStop" },
+    "message": { "$ref": "#/definitions/Message" },
+    "driverCoordinates": { "$ref": "#/definitions/DriverCoordinates" }
+  }
+}
