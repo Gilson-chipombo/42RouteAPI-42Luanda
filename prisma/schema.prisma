@@ -18,6 +18,7 @@ model Admins {
   username  String? @unique
   email     String? @unique
   passwrd   String?
+  role      = "admin"
 }
 
 model Cadetes {
@@ -30,6 +31,7 @@ model Cadetes {
   passwrd   String?
   phone     Int?
   stop_id   Int?
+  role      = "cadete"
   stop      MiniBusStop? @relation(fields: [stop_id], references: [id])
   messages  Message[]    @relation("CadeteMessages")
 }
@@ -42,6 +44,7 @@ model Drivers {
   passwrd     String?
   photo       String?
   phone       Int?
+  role        = "driver"
   coordinates DriverCoordinates[]
   messages    Message[]           @relation("DriverMessages")
 }

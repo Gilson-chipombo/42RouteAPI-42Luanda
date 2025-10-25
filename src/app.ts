@@ -8,6 +8,7 @@ import prismaPlugin from "./plugins/prisma";
 import adminRoutes from "./modules/admins/admin.routes";
 import cadeteRoutes from "./modules/cadetes/cadete.routes";
 import driversRoutes from "./modules/drivers/driver.routes";
+import authRoutes from "./modules/auth/auth.routes";
 import minibusstopsRoutes from "./modules/miniBusStops/miniBusStops.routes";
 
 export async function buildApp() {
@@ -29,11 +30,9 @@ export async function buildApp() {
     uiConfig: { docExpansion: "list" },
   });
 
-  // ✅ Caminho corrigido para o JSON Schema
   const prismaSchemaPath = path.resolve(process.cwd(), "schemas","json-schema.json");
   const prismaSchemas = JSON.parse(readFileSync(prismaSchemaPath, "utf-8"));
 
-  // ✅ Corrigir referências
   function fixRefs(schema: any) {
     if (schema && typeof schema === "object") {
       for (const key in schema) {
@@ -47,7 +46,6 @@ export async function buildApp() {
     }
   }
 
-  // ✅ Remover campos sensíveis antes de registrar
   const sensitiveFields = ["password", "passwrd", "token", "refreshToken"];
 
   Object.entries(prismaSchemas.definitions).forEach(([name, schema]: any) => {
@@ -60,7 +58,7 @@ export async function buildApp() {
         }
       });
     }
-    
+
     app.addSchema({
       $id: name,
       ...(schema as Record<string, any>),
@@ -69,6 +67,7 @@ export async function buildApp() {
 
   await app.register(prismaPlugin);
 
+  app.register(authRoutes, { prefix: "/api"});
   app.register(adminRoutes, { prefix: "/api" });
   app.register(cadeteRoutes, { prefix: "/api" });
   app.register(driversRoutes, { prefix: "/api" });
