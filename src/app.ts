@@ -10,6 +10,7 @@ import cadeteRoutes from "./modules/cadetes/cadete.routes";
 import driversRoutes from "./modules/drivers/driver.routes";
 import authRoutes from "./modules/auth/auth.routes";
 import minibusstopsRoutes from "./modules/miniBusStops/miniBusStops.routes";
+import "dotenv/config";
 
 export async function buildApp() {
   const app = Fastify({ logger: true });
@@ -24,6 +25,7 @@ export async function buildApp() {
       },
     },
   });
+console.log("CLIENT ID:", process.env.FORTYTWO_CLIENT_SECRET);
 
   await app.register(swaggerUI, {
     routePrefix: "/api/docs",
