@@ -29,42 +29,37 @@ export class AuthService {
     return authorizationUri;
   }
 
-  static async handleCallback(code: string): Promise<{token: string }> {
-    const tokenParams = {
-      code,
-      redirect_uri: oauthConfig.redirectUri,
-      scope: "public",
-    };
+    static async handleCallback(code: string) {
+      try {
+        const tokenParams = {
+          code,
+          redirect_uri: oauthConfig.redirectUri, // Esta deve estar EXACTAMENTE igual ao painel da 42
+          grant_type: "authorization_code",
+        };
 
-    const accessToken = await client.getToken(tokenParams);
-    const token  = accessToken.token.access_token as string;
+        const accessToken: any = await client.getToken(tokenParams);
+        const token = accessToken.token.access_token as string;
 
-    // Pega perfil do usuário
-    const response = await fetch(`${oauthConfig.auth.tokenHost}/v2/me`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const profile: IntraProfile = await response.json();
+        const response = await fetch("https://api.intra.42.fr/v2/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-    // Procura ou cria usuário                            //intraId: profile.id
-    let cadete = await prisma.cadetes.findUnique({ where: { id: profile.id } });
-    if (!cadete) {
-      cadete = await prisma.cadetes.create({
-        data: {
-          id: profile.id,
-          email: profile.email,
-          username: profile.login,
-          //role: "cadete",
+        if (!response.ok) {
+          throw new Error("Erro ao buscar perfil no Intra 42");
         }
-      });
-    }
 
-    // Gera teu JWT
-    const jwtToken = jwt.sign(
-      { userId: cadete.id, intraId: cadete.id},
-      process.env.JWT_SECRET as string,
-      { expiresIn: "1h" }
-    );
+        const profile = await response.json();
 
-    return {token: jwtToken };
+        return {
+          name: profile.usual_full_name,
+          username: profile.login,
+          email: profile.email,
+          id: profile.id,
+        };
+
+      } catch (error: any) {
+        console.error("Erro no callback OAuth:", error.response?.data || error);
+        throw new Error("Falha na autenticação com o Intra 42");
+      }
   }
 }
