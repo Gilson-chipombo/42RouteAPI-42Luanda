@@ -9,7 +9,7 @@ async function start() {
    })
   }catch(err)
   {
-    app.log.error(err);
+    //app.log.error(err);
     process.exit(1);
   }
 }

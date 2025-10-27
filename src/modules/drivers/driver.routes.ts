@@ -10,13 +10,6 @@ export default async function driverRoutes(app: FastifyInstance) {
     app.post('/driver',    { schema: docs.create }, driversController.create);
     app.put('/driver/:id', { schema: docs.update }, driversController.update);
     app.delete('/driver/:id', { schema: docs.delete }, driversController.delete);
+    app.put('/driver/location/socket/:id', driversController.updateLocation);
+    //app.get('/driver/location/:id', driversController.getDriverLocation);
 }
-
-/*
-export default async function driverRoutes(app: FastifyInstance) {
-    app.get('/drivers', driversController.getAll);
-    app.get('/driver/:id', driversController.getById);
-    app.post('/driver', driversController.create);
-    app.put('/driver/:id', driversController.update);
-    app.delete('/driver/:id', driversController.delete);
-}*/

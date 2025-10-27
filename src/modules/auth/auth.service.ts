@@ -1,7 +1,5 @@
 import { oauthConfig } from "./auth.config";
 import OAuth2 from "simple-oauth2";
-//import prisma from "../../plugins/prisma"; // ou import { PrismaClient } from "@prisma/client";
-//import { IntraProfile, IUser } from "./user.interface";
 import {IntraProfile, IUser} from "../cadetes/cadete.interface"
 import jwt from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
@@ -33,7 +31,7 @@ export class AuthService {
       try {
         const tokenParams = {
           code,
-          redirect_uri: oauthConfig.redirectUri, // Esta deve estar EXACTAMENTE igual ao painel da 42
+          redirect_uri: oauthConfig.redirectUri, 
           grant_type: "authorization_code",
         };
 

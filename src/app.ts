@@ -25,7 +25,6 @@ export async function buildApp() {
       },
     },
   });
-console.log("CLIENT ID:", process.env.FORTYTWO_CLIENT_SECRET);
 
   await app.register(swaggerUI, {
     routePrefix: "/api/docs",

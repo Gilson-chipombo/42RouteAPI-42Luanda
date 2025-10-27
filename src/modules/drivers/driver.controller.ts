@@ -40,6 +40,17 @@ export const driversController = {
         const driver = await driverService.update(req.params.id, req.body);
         reply.send(driver)
     },
+
+
+
+
+    async updateLocation( req: FastifyRequest<{ Params: { id: number }, Body: { lat: number, long: number } }>, reply: FastifyReply) {
+        const driverLocation = await driverService.updateLocation(req.params.id, req.body);
+        reply.send(driverLocation);
+    },
+
+
+
     async delete(req: FastifyRequest<{Params: { id: number } }>, reply: FastifyReply) {
         await driverService.delete(req.params.id);
         reply.status(204).send();
