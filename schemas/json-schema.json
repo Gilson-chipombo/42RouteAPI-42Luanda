@@ -142,9 +142,19 @@
           ]
         },
         "coordinates": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DriverCoordinates"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "assignments": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/DriverCoordinates"
+            "$ref": "#/definitions/DriverAssignment"
           }
         },
         "messages": {
@@ -190,6 +200,68 @@
           "items": {
             "$ref": "#/definitions/Cadetes"
           }
+        },
+        "route": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Route"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "Route": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "stops": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MiniBusStop"
+          }
+        },
+        "drivers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DriverAssignment"
+          }
+        }
+      }
+    },
+    "DriverAssignment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "active": {
+          "type": "boolean",
+          "default": true
+        },
+        "assignedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "driver": {
+          "$ref": "#/definitions/Drivers"
+        },
+        "route": {
+          "$ref": "#/definitions/Route"
         }
       }
     },
@@ -241,6 +313,12 @@
     },
     "miniBusStop": {
       "$ref": "#/definitions/MiniBusStop"
+    },
+    "route": {
+      "$ref": "#/definitions/Route"
+    },
+    "driverAssignment": {
+      "$ref": "#/definitions/DriverAssignment"
     },
     "message": {
       "$ref": "#/definitions/Message"
