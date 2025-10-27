@@ -42,7 +42,8 @@ model Drivers {
   passwrd     String?
   photo       String?
   phone       Int?
-  coordinates DriverCoordinates[]
+  coordinates DriverCoordinates?
+  assignments DriverAssignment[]
   messages    Message[]           @relation("DriverMessages")
 }
 
@@ -53,6 +54,31 @@ model MiniBusStop {
   latitude  Float?
   longitude Float?
   cadetes   Cadetes[]
+  routeId   Int?
+  route     Route?    @relation(fields: [routeId], references: [id])
+}
+
+model Route {
+  id        Int             @id @default(autoincrement())
+  name      String
+  stops     MiniBusStop[]
+  drivers   DriverAssignment[]
+}
+
+model DriverAssignment {
+  id         Int      @id @default(autoincrement())
+  driverId   Int
+  routeId    Int
+  active     Boolean  @default(true)
+  assignedAt DateTime @default(now())
+  endedAt    DateTime?
+
+  driver Drivers @relation(fields: [driverId], references: [id])
+  route  Route   @relation(fields: [routeId], references: [id])
+
+  @@index([driverId])
+  @@index([routeId])
+  @@unique([driverId, active]) // ✨ só 1 rota ativa por motorista
 }
 
 model Message {
@@ -68,6 +94,6 @@ model DriverCoordinates {
   id        Int     @id @default(autoincrement())
   lat       Float
   long      Float
-  id_driver Int @unique
+  id_driver Int   @unique
   driver    Drivers @relation(fields: [id_driver], references: [id])
 }
