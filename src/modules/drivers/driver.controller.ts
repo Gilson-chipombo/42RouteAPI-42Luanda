@@ -46,6 +46,14 @@ export const driversController = {
 
     async updateLocation( req: FastifyRequest<{ Params: { id: number }, Body: { lat: number, long: number } }>, reply: FastifyReply) {
         const driverLocation = await driverService.updateLocation(req.params.id, req.body);
+        
+        // Emitir WebSocket em tempo real
+        (req.server as any).io.emit("driver:location", {
+            id_driver: req.params.id,
+            ...req.body
+        });
+
+        
         reply.send(driverLocation);
     },
 
