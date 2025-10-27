@@ -78,7 +78,7 @@ model DriverAssignment {
 
   @@index([driverId])
   @@index([routeId])
-  @@unique([driverId, active]) // ✨ só 1 rota ativa por motorista
+  @@unique([driverId, active]) //só 1 rota ativa por motorista
 }
 
 model Message {
