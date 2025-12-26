@@ -10,6 +10,7 @@ import cadeteRoutes from "./modules/cadetes/cadete.routes";
 import driversRoutes from "./modules/drivers/driver.routes";
 import authRoutes from "./modules/auth/auth.routes";
 import minibusstopsRoutes from "./modules/miniBusStops/miniBusStops.routes";
+import routeRoutes from "./modules/routes/route.routes";
 import "dotenv/config";
 
 export async function buildApp() {
@@ -69,6 +70,7 @@ export async function buildApp() {
   await app.register(prismaPlugin);
 
   app.register(authRoutes, { prefix: "/api"});
+  //app.register(routeRoutes, { prefix: "/api" });
   app.register(adminRoutes, { prefix: "/api" });
   app.register(cadeteRoutes, { prefix: "/api" });
   app.register(driversRoutes, { prefix: "/api" });

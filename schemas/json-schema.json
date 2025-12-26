@@ -142,19 +142,9 @@
           ]
         },
         "coordinates": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/DriverCoordinates"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "assignments": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/DriverAssignment"
+            "$ref": "#/definitions/DriverCoordinates"
           }
         },
         "messages": {
@@ -162,6 +152,16 @@
           "items": {
             "$ref": "#/definitions/Message"
           }
+        },
+        "current_route": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Routes"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       }
     },
@@ -201,67 +201,57 @@
             "$ref": "#/definitions/Cadetes"
           }
         },
-        "route": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Route"
-            },
-            {
-              "type": "null"
-            }
-          ]
+        "routes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RouteStops"
+          }
         }
       }
     },
-    "Route": {
+    "Routes": {
       "type": "object",
       "properties": {
         "id": {
           "type": "integer"
         },
-        "name": {
+        "route_name": {
           "type": "string"
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "stops": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/MiniBusStop"
+            "$ref": "#/definitions/RouteStops"
           }
         },
         "drivers": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/DriverAssignment"
+            "$ref": "#/definitions/Drivers"
           }
         }
       }
     },
-    "DriverAssignment": {
+    "RouteStops": {
       "type": "object",
       "properties": {
         "id": {
           "type": "integer"
         },
-        "active": {
-          "type": "boolean",
-          "default": true
-        },
-        "assignedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "endedAt": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date-time"
-        },
-        "driver": {
-          "$ref": "#/definitions/Drivers"
+        "position": {
+          "type": "integer"
         },
         "route": {
-          "$ref": "#/definitions/Route"
+          "$ref": "#/definitions/Routes"
+        },
+        "stop": {
+          "$ref": "#/definitions/MiniBusStop"
         }
       }
     },
@@ -314,11 +304,11 @@
     "miniBusStop": {
       "$ref": "#/definitions/MiniBusStop"
     },
-    "route": {
-      "$ref": "#/definitions/Route"
+    "routes": {
+      "$ref": "#/definitions/Routes"
     },
-    "driverAssignment": {
-      "$ref": "#/definitions/DriverAssignment"
+    "routeStops": {
+      "$ref": "#/definitions/RouteStops"
     },
     "message": {
       "$ref": "#/definitions/Message"
