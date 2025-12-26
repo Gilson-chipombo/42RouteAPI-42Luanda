@@ -4,5 +4,6 @@ export interface Routes {
 }
 
 export interface RouteStops {
-  stopIds: number[]; // IDs das paragens
+  stop_id: number[]; // IDs das paragens
+  position:  number;
 }
