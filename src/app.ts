@@ -70,7 +70,7 @@ export async function buildApp() {
   await app.register(prismaPlugin);
 
   app.register(authRoutes, { prefix: "/api"});
-  //app.register(routeRoutes, { prefix: "/api" });
+  app.register(routeRoutes, { prefix: "/api" });
   app.register(adminRoutes, { prefix: "/api" });
   app.register(cadeteRoutes, { prefix: "/api" });
   app.register(driversRoutes, { prefix: "/api" });

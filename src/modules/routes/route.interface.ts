@@ -1,5 +1,5 @@
 export interface Routes {
-  name: string;
+  route_name: string;
   description?: string;
 }
 

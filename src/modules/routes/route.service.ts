@@ -1,14 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-import { Routes, RouteStops } from "./route.interface";
+import { Routes, RouteStops } from "./route.interface"
 
-class RouteService {
+export const routeService = {
   async createRoute(data: Routes) {
-    return prisma.routes.create({
-      data,
-    });
-  }
+    return prisma.routes.create({data});
+  },
 
   async addStopsToRoute(routeId: number, data: RouteStops) {
     return prisma.routes.update({
@@ -22,7 +20,7 @@ class RouteService {
         stops: true
       }
     });
-  }
+  },
 
   async listRoutes() {
     return prisma.routes.findMany({
@@ -32,5 +30,3 @@ class RouteService {
     });
   }
 }
-
-export default new RouteService();

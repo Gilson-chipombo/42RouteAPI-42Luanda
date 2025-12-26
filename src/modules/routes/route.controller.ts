@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import routeService from "./route.service";
+import { routeService } from "./route.service";
 import { Routes, RouteStops } from "./route.interface";
 
 class RouteController {
