@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/main.ts",
-    "generate:schema": "npx prisma generate"
+    "build": "prisma generate && tsc",
+    "generate:schema": "npx prisma generate",
+    "dev": "ts-node-dev --respawn --transpile-only src/main.ts"
   },
   "repository": {
     "type": "git",
