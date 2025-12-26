@@ -35,9 +35,12 @@ export const driverService = {
           });
         }
 
-        return await prisma.driverCoordinates.update({
+        return await prisma.driverCoordinates.updateMany({
           where: { id_driver },
-          data,
+          data: {
+            lat: data.lat,
+            long: data.long,
+          },
         });
       } catch (error) {
         console.error("Erro ao atualizar coordenadas:", error);
