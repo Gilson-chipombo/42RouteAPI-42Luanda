@@ -22,7 +22,7 @@ export const driverService = {
     },
     async updateLocation(id_driver: number, data: { lat: number; long: number }) {
       try {
-        const existingRecord = await prisma.driverCoordinates.findUnique({
+        const existingRecord = await prisma.driverCoordinates.findFirst({
           where: { id_driver },
         });
 
