@@ -20,28 +20,32 @@ export const driverService = {
             data
         });
     },
-    async updateLocation(id_driver: number, data: { lat: number; long: number }) {
+
+    async updateLocation( id_driver: number, data: { lat: number; long: number }) {
       try {
-        const existingRecord = await prisma.driverCoordinates.findFirst({
+        const existing = await prisma.driverCoordinates.findFirst({
           where: { id_driver },
         });
 
-        if (!existingRecord) {
+        if (!existing) {
           return await prisma.driverCoordinates.create({
             data: {
               id_driver,
-              ...data,
+              lat: data.lat,
+              long: data.long,
             },
           });
         }
 
-        return await prisma.driverCoordinates.updateMany({
+        await prisma.driverCoordinates.updateMany({
           where: { id_driver },
           data: {
             lat: data.lat,
             long: data.long,
           },
         });
+
+        return { updated: true };
       } catch (error) {
         console.error("Erro ao atualizar coordenadas:", error);
         throw new Error("Erro ao atualizar localização do motorista");
