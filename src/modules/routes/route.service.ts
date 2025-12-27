@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export const routeService = {
 
   async createRoute(data: Routes) {
-    return prisma.routes.create({
+    return prisma.route.create({
       data: {
         route_name: data.route_name,
         description: data.description,
@@ -18,7 +18,7 @@ export const routeService = {
     routeId: number,
     data: RouteStops
   ) {
-    return prisma.routes.update({
+    return prisma.route.update({
       where: { id: routeId },
       data: {
         stops: {
@@ -39,7 +39,7 @@ export const routeService = {
   },
 
   async listRoutes() {
-    return prisma.routes.findMany({
+    return prisma.route.findMany({
       include: {
         stops: {
           include: {

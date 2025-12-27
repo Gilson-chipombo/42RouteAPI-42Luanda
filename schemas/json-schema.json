@@ -156,7 +156,7 @@
         "current_route": {
           "anyOf": [
             {
-              "$ref": "#/definitions/Routes"
+              "$ref": "#/definitions/Route"
             },
             {
               "type": "null"
@@ -209,7 +209,7 @@
         }
       }
     },
-    "Routes": {
+    "Route": {
       "type": "object",
       "properties": {
         "id": {
@@ -248,7 +248,7 @@
           "type": "integer"
         },
         "route": {
-          "$ref": "#/definitions/Routes"
+          "$ref": "#/definitions/Route"
         },
         "stop": {
           "$ref": "#/definitions/MiniBusStop"
@@ -304,8 +304,8 @@
     "miniBusStop": {
       "$ref": "#/definitions/MiniBusStop"
     },
-    "routes": {
-      "$ref": "#/definitions/Routes"
+    "route": {
+      "$ref": "#/definitions/Route"
     },
     "routeStops": {
       "$ref": "#/definitions/RouteStops"

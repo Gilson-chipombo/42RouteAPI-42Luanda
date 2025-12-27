@@ -47,7 +47,7 @@ model Drivers {
 
   // Rota atual do motorista
   current_route_id Int?
-  current_route    Routes? @relation(fields: [current_route_id], references: [id])
+  current_route    Route? @relation(fields: [current_route_id], references: [id])
 }
 
 model MiniBusStop {
@@ -62,7 +62,7 @@ model MiniBusStop {
   routes RouteStops[]
 }
 
-model Routes {
+model Route {
   id         Int          @id @default(autoincrement())
   route_name String
   description String?
@@ -82,7 +82,7 @@ model RouteStops {
   // Ordem da paragem na rota
   position  Int
 
-  route     Routes      @relation(fields: [route_id], references: [id])
+  route     Route      @relation(fields: [route_id], references: [id])
   stop      MiniBusStop @relation(fields: [stop_id], references: [id])
 
   @@unique([route_id, stop_id]) // Evita repetir paragem na mesma rota

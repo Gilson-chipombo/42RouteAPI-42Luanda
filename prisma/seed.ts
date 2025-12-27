@@ -19,7 +19,7 @@ async function main() {
   await prisma.routeStops.deleteMany();
   await prisma.cadetes.deleteMany();
   await prisma.drivers.deleteMany();
-  await prisma.routes.deleteMany();
+  await prisma.route.deleteMany();
   await prisma.miniBusStop.deleteMany();
   await prisma.admins.deleteMany();
 
@@ -50,7 +50,7 @@ async function main() {
   // 🛣️ Rotas (4 rotas)
   const routes = await Promise.all(
     Array.from({ length: 4 }).map(() =>
-      prisma.routes.create({
+      prisma.route.create({
         data: {
           route_name: faker.lorem.word(),
           description: faker.lorem.sentence()
