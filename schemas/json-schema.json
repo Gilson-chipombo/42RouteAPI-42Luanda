@@ -201,11 +201,8 @@
             "$ref": "#/definitions/Cadetes"
           }
         },
-        "routes": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/RouteStops"
-          }
+        "route": {
+          "$ref": "#/definitions/Route"
         }
       }
     },
@@ -227,7 +224,7 @@
         "stops": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/RouteStops"
+            "$ref": "#/definitions/MiniBusStop"
           }
         },
         "drivers": {
@@ -235,23 +232,6 @@
           "items": {
             "$ref": "#/definitions/Drivers"
           }
-        }
-      }
-    },
-    "RouteStops": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "position": {
-          "type": "integer"
-        },
-        "route": {
-          "$ref": "#/definitions/Route"
-        },
-        "stop": {
-          "$ref": "#/definitions/MiniBusStop"
         }
       }
     },
@@ -306,9 +286,6 @@
     },
     "route": {
       "$ref": "#/definitions/Route"
-    },
-    "routeStops": {
-      "$ref": "#/definitions/RouteStops"
     },
     "message": {
       "$ref": "#/definitions/Message"
