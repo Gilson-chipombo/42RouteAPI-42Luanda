@@ -56,9 +56,9 @@ model MiniBusStop {
   distrit   String?
   latitude  Float?
   longitude Float?
-  cadetes   Cadetes[]
-  
   route_id Int
+  
+  cadetes   Cadetes[]
   route Route @relation(fields: [route_id], references: [id])
 }
 

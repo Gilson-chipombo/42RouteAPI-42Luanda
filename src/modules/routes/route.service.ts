@@ -31,7 +31,7 @@ export const routeService = {
       include: {
         stops: {
           include: {
-            stop: true
+            route: true
           }
         }
       }
@@ -43,7 +43,7 @@ export const routeService = {
       include: {
         stops: {
           include: {
-            stop: true
+            route: true
           }
         }
       }
@@ -60,7 +60,7 @@ export const routeService = {
         include:{
           stops:{
             include:{
-                stop: true
+                route: true
             }
           }
         }

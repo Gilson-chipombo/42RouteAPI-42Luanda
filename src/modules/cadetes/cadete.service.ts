@@ -46,27 +46,20 @@ export const cadeteService = {
               full_name: true,
               stop:{
                   select:{
-                    id: true,
-                    stop_name: true,
-                    distrit: true,
-                    latitude: true,
-                    longitude: true,
-                    
-                    routes:{
-                      take: 1,
-                      select:{
-                          route_id: true,
-                          route:{
-                              select:{
-                                  id: true,
-                                  route_name: true,
-                                  description: true
-                              }
+                      id: true,
+                      stop_name: true,
+                      distrit: true,
+                      latitude: true,
+                      longitude: true,
+                      route:{
+                          select:{
+                              id: true,
+                              route_name: true,
+                              description: true
                           }
                       }
-                    }
-                  }    
-              }
+                  }
+              } 
             }
         });
     }
