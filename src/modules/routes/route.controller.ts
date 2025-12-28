@@ -1,6 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { routeService } from "./route.service";
 import { Routes, RouteStops } from "./route.interface";
+import { error, log } from "console";
 
 class RouteController {
   async createRoute(req: FastifyRequest<{ Body: Routes }>, reply: FastifyReply) {
@@ -16,6 +17,18 @@ class RouteController {
   async list(req: FastifyRequest, reply: FastifyReply) {
     const routes = await routeService.listRoutes();
     reply.send(routes);
+  }
+
+  async getRouteById(req: FastifyRequest<{Params: {id: number}}>, reply: FastifyReply){
+    
+    const id = Number(req.params.id);  
+
+    if (Number.isNaN(id)){
+      return reply.status(200).send({error: "Invalid route id"});
+    }
+    
+    const route = await routeService.getById(req.params.id);
+    reply.send(route);
   }
 }
 

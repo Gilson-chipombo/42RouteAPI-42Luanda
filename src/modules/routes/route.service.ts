@@ -48,5 +48,22 @@ export const routeService = {
         }
       }
     });
+  },
+
+  async getById(id: number)
+  {              
+      id = Number(id);
+      
+                       
+      return prisma.route.findUnique({
+        where: {id: id},
+        include:{
+          stops:{
+            include:{
+                stop: true
+            }
+          }
+        }
+      });
   }
 };
