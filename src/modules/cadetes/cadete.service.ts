@@ -27,14 +27,47 @@ export const cadeteService = {
         });
     },
     
-    findByUsernameOrEmail(usernameOrEmail: string) {
-    return prisma.cadetes.findFirst({
-      where: {
-        OR: [
-          { username: usernameOrEmail },
-          { email: usernameOrEmail }
-        ]
-      }
-    })
-  }
+    async findByUsernameOrEmail(usernameOrEmail: string) {
+      return prisma.cadetes.findFirst({
+        where: {
+          OR: [
+            { username: usernameOrEmail },
+            { email: usernameOrEmail }
+          ]
+        }
+      })
+    },
+
+    async getCadeteRouteId(cadete_Id: number){
+        cadete_Id = Number(cadete_Id);
+        return prisma.cadetes.findUnique({
+            where: {id: cadete_Id},
+            select:{
+              full_name: true,
+              stop:{
+                  select:{
+                    id: true,
+                    stop_name: true,
+                    distrit: true,
+                    latitude: true,
+                    longitude: true,
+                    
+                    routes:{
+                      take: 1,
+                      select:{
+                          route_id: true,
+                          route:{
+                              select:{
+                                  id: true,
+                                  route_name: true,
+                                  description: true
+                              }
+                          }
+                      }
+                    }
+                  }    
+              }
+            }
+        });
+    }
 };

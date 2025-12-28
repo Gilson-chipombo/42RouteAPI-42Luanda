@@ -4,6 +4,15 @@ import bcrypt from "bcryptjs";
 
 
 export const cadetesController = {
+
+    async getRouteById(req: FastifyRequest<{Params: {id: number}}>, reply: FastifyReply)
+    {
+        const routeId = await cadeteService.getCadeteRouteId(req.params.id);
+
+        if (!routeId) return reply.status(404).send({error: "Cadete nao encontrado ou nao associado a nenhuma rota"})
+        return reply.status(200).send(routeId);
+    },
+
     async getAll(req: FastifyRequest, reply: FastifyReply) {
         const cadetes = await cadeteService.findAll();
         return reply.send(cadetes)
