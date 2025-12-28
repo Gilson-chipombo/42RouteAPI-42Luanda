@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { driverService } from "./driver.service";
 import bcrypt from "bcryptjs";
+import { AssignRouteDTO } from "./driver.interface";
 
 
 export const driversController = {
@@ -78,5 +79,29 @@ export const driversController = {
     // const token = reply.jwtSign({ sub: user.id, role: 'cadete' })
     const { passwrd: _omit, ...safe } = user
     return reply.send({ user: safe /*, token*/ })
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+  async assignRoute(req: FastifyRequest<{Params: {id: number}, Body: AssignRouteDTO}>, reply: FastifyReply)
+  {
+        const driver =  await driverService.assignRoute(Number(req.params.id), req.body);
+        reply.status(200).send(driver);
+  },
+
+  async leaveRoute(req: FastifyRequest<{Params:{id: number}}>, reply: FastifyReply)
+  {
+    const driver = await driverService.leaveRoute(Number(req.params.id))
+    reply.send(driver);
   }
+
 };

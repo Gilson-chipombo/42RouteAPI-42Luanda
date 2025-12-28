@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { AssignRouteDTO } from "./driver.interface";
 
 const prisma = new PrismaClient();
 
@@ -19,6 +20,22 @@ export const driverService = {
             where: {id},
             data
         });
+    },
+     async delete(id: number){
+        return prisma.drivers.delete({
+            where: {id}
+        });
+    },
+    
+    findByUsernameOrEmail(usernameOrEmail: string) {
+      return prisma.drivers.findFirst({
+        where: {
+          OR: [
+            { username: usernameOrEmail },
+            { email: usernameOrEmail }
+          ]
+        }
+      })
     },
 
     async updateLocation( id_driver: number, data: { lat: number; long: number }) {
@@ -52,20 +69,28 @@ export const driverService = {
       }
     },
 
-    async delete(id: number){
-        return prisma.drivers.delete({
-            where: {id}
-        });
+
+
+
+    async assignRoute(driverId: number, data: AssignRouteDTO){
+      return  prisma.drivers.update({
+        where: { id: driverId},
+        data:{
+          current_route_id: data.current_route_id
+        },
+        include:{
+          current_route: true
+        }
+      });
     },
-    
-    findByUsernameOrEmail(usernameOrEmail: string) {
-    return prisma.drivers.findFirst({
-      where: {
-        OR: [
-          { username: usernameOrEmail },
-          { email: usernameOrEmail }
-        ]
-      }
-    })
-  }
+
+    async leaveRoute(driverId: number)
+    {
+      return prisma.drivers.update({
+        where: {id: driverId},
+        data:{
+            current_route_id: null
+        }
+      });
+    }
 };

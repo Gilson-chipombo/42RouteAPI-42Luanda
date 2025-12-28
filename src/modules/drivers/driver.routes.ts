@@ -12,4 +12,7 @@ export default async function driverRoutes(app: FastifyInstance) {
     app.delete('/driver/:id', { schema: docs.delete }, driversController.delete);
     app.put('/driver/location/socket/:id', driversController.updateLocation);
     //app.get('/driver/location/:id', driversController.getDriverLocation);
+
+    app.post('/driver/assign/route/:id', driversController.assignRoute)
+    app.delete('/driver/leave/route/:id', driversController.leaveRoute);
 }
