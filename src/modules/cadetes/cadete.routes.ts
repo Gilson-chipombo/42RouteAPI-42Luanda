@@ -9,5 +9,5 @@ export default async function cadeteRoutes(app: FastifyInstance) {
     app.post('/cadete', { schema: docs.create }, cadetesController.create);
     app.put('/cadetes/:id', { schema: docs.update }, cadetesController.update);
     app.delete('/cadetes/:id', { schema: docs.delete }, cadetesController.delete);
-    app.get('/cadete/route/information/:id', cadetesController.getRouteById);
+    app.get('/cadete/route/informations/:id', cadetesController.getRouteById);
 }

@@ -73,6 +73,16 @@ export const driverService = {
 
 
     async assignRoute(driverId: number, data: AssignRouteDTO){
+      const existDriverIdWithRoute = await prisma.drivers.findFirst({
+        where: {current_route_id: data.current_route_id},
+        select:{
+            id: true
+        }
+      });
+
+      if (existDriverIdWithRoute)
+        this.leaveRoute(existDriverIdWithRoute.id);
+  
       return  prisma.drivers.update({
         where: { id: driverId},
         data:{

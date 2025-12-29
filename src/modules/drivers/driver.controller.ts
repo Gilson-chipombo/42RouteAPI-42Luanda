@@ -1,7 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { driverService } from "./driver.service";
+import { routeService } from "../routes/route.service";
 import bcrypt from "bcryptjs";
 import { AssignRouteDTO } from "./driver.interface";
+import { error } from "console";
+
 
 
 export const driversController = {
@@ -94,6 +97,9 @@ export const driversController = {
 
   async assignRoute(req: FastifyRequest<{Params: {id: number}, Body: AssignRouteDTO}>, reply: FastifyReply)
   {
+        const existRoute = await routeService.getById(Number(req.body.current_route_id));
+        
+        if (!existRoute) return reply.status(404).send({error: `route_id: ${req.body.current_route_id} does not exist`});
         const driver =  await driverService.assignRoute(Number(req.params.id), req.body);
         reply.status(200).send(driver);
   },
