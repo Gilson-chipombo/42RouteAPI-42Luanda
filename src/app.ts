@@ -13,6 +13,8 @@ import minibusstopsRoutes from "./modules/miniBusStops/miniBusStops.routes";
 import routeRoutes from "./modules/routes/route.routes";
 import "dotenv/config";
 
+import { initSocket } from "./socket";
+
 export async function buildApp() {
   const app = Fastify({ logger: true });
 
@@ -69,6 +71,8 @@ export async function buildApp() {
 
   await app.register(prismaPlugin);
 
+  initSocket(app);
+  
   app.register(authRoutes, { prefix: "/api"});
   app.register(routeRoutes, { prefix: "/api" });
   app.register(adminRoutes, { prefix: "/api" });

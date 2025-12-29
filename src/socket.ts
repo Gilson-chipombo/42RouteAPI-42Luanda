@@ -1,0 +1,101 @@
+import { Server } from "socket.io"
+import { FastifyInstance } from "fastify"
+import { PrismaClient } from "@prisma/client"
+
+const prisma = new PrismaClient();
+
+export function initSocket(app: FastifyInstance){
+    const io = new Server(app.server, {
+        cors:{
+            origin: "*"
+        }
+    });
+
+    io.on("connection", (socket) =>{
+        console.log("🟢 Socket conectado: ", socket.id);
+
+
+        /**
+         * Mostorista entra no room rota
+         */
+        socket.on("driver:joinRoute", async({driverId}) =>{
+            const driver = await prisma.drivers.findUnique({
+                where: {id: driverId}
+            });
+            
+            if (!driver?.current_route_id) return;
+            
+            const room = `route_${driver.current_route_id}`;
+            socket.join(room);
+
+            console.log(`🚗 Driver ${driverId} entrou no room ${room}`);
+        });
+
+
+
+
+        /**
+         * Cadete entra no room da rota
+         */
+        socket.on("cadete:joinRoute", async({cadeteId})=>{
+            const cadete = await prisma.cadetes.findUnique({
+                where: {id: cadeteId},
+                include:{
+                    stop:{
+                        include:{
+                            route: true
+                        }
+                    }
+                }
+            });
+
+            const cadeteRouteId = cadete?.stop?.route?.id
+            
+            if (!cadeteRouteId) return;
+
+            const room = `route_${cadeteRouteId}`;
+            socket.join(room);
+            console.log(`🎓 Cadete ${cadeteId} entrou no room ${room}`);
+        });
+
+
+
+
+        /**
+         * Atualizacao de localizacao do motorista
+         */
+        socket.on("driver:updateLocation", async(data) =>{
+            const {id_driver, lat, long} = data;
+   
+            const driver = await prisma.drivers.findUnique({ where: {id: id_driver}});
+
+            if (!driver?.current_route_id) return "Driver is not assign to one route. Please assign one route first";
+
+            await prisma.driverCoordinates.upsert({
+                where: {id_driver: id_driver},
+                update: {lat, long},
+                create: {id_driver: id_driver, lat, long}
+            });
+
+            const room = `route_${driver.current_route_id}`;
+
+            //Emit para os cadetes da rota
+
+            io.to(room).emit("driver:location",{
+                id_driver,
+                lat,
+                long,
+                routeId: driver.current_route_id
+            });
+        });
+
+
+        //Desconectar socket
+        socket.on("disconnect", () =>{
+            console.log("🔴 Socket disconnected: ",socket.id);
+        });
+
+    });
+}
+
+
