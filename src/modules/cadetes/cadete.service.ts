@@ -55,7 +55,13 @@ export const cadeteService = {
                           select:{
                               id: true,
                               route_name: true,
-                              description: true
+                              description: true,
+                              drivers:{
+                                    select:{
+                                        full_name: true,
+                                        phone: true
+                                    }
+                              }
                           }
                       }
                   }
