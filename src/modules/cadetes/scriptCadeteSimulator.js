@@ -14,6 +14,6 @@ socket.on("connect", () => {
 });
 
 socket.on("driver:location", (data) => {
-  console.log("📍 Localização recebida:", data);
+  console.log("Localização recebida:", data);
 });
 
