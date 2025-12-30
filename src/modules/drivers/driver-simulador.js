@@ -14,10 +14,10 @@ socket.on("connect", () => {
 });
 
 socket.on("disconnect", () => {
-  console.log("❌ Motorista desconectado");
+  console.log("Motorista desconectado");
 });
 
-// Função que envia localização aleatória dentro de Luanda 😄
+// Função que envia localização aleatória dentro de Luanda 
 function simulateLocation() {
   setInterval(() => {
     const lat = -8.83 + Math.random() * 0.02;
