@@ -1,8 +1,26 @@
 import { Server } from "socket.io"
 import { FastifyInstance } from "fastify"
 import { PrismaClient } from "@prisma/client"
+import { RouteLocationState } from "./modules/routes/route.interface";
 
 const prisma = new PrismaClient();
+
+const routeLocationState: Record <number, RouteLocationState> = {};
+
+const DRIVER_TIMEOUT = 10_000; //10 segundos  
+
+function isDriveActive(routeId: number){
+    
+    const state = routeLocationState[routeId];
+    if (!state) return false;
+
+    return(
+        state.source === "driver" &&
+        Date.now() - state.lastUpdate < DRIVER_TIMEOUT
+    );
+
+}
+
 
 export function initSocket(app: FastifyInstance){
     const io = new Server(app.server, {
@@ -57,12 +75,12 @@ export function initSocket(app: FastifyInstance){
             socket.join(room);
             console.log(`🎓 Cadete ${cadeteId} entrou no room ${room}`);
         });
-
+        
 
 
 
         /**
-         * Atualizacao de localizacao do motorista
+         * Atualizacao de localizacao do motorista 5427
          */
         socket.on("driver:updateLocation", async(data) =>{
             const {id_driver, lat, long} = data;
@@ -70,6 +88,16 @@ export function initSocket(app: FastifyInstance){
             const driver = await prisma.drivers.findUnique({ where: {id: id_driver}});
 
             if (!driver?.current_route_id) return "Driver is not assign to one route. Please assign one route first";
+
+            //Atualizar estado da rota
+
+            const routeId =  driver?.current_route_id;
+            routeLocationState[routeId]={
+                source: "driver",
+                sourceId: driver.id,
+                lastUpdate: Date.now(),
+                sourceName: driver.full_name
+            };
 
             await prisma.driverCoordinates.upsert({
                 where: {id_driver: id_driver},
