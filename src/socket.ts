@@ -2,6 +2,7 @@ import { Server } from "socket.io"
 import { FastifyInstance } from "fastify"
 import { PrismaClient } from "@prisma/client"
 import { RouteLocationState } from "./modules/routes/route.interface";
+import { ro } from "@faker-js/faker/.";
 
 const prisma = new PrismaClient();
 
@@ -29,6 +30,7 @@ export function initSocket(app: FastifyInstance){
         }
     });
 
+
     io.on("connection", (socket) =>{
         console.log("🟢 Socket conectado: ", socket.id);
 
@@ -48,6 +50,26 @@ export function initSocket(app: FastifyInstance){
 
             console.log(`🚗 Driver ${driverId} entrou no room ${room}`);
         });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -79,6 +101,39 @@ export function initSocket(app: FastifyInstance){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         /**
          * Atualizacao de localizacao do motorista 5427
          */
@@ -89,8 +144,9 @@ export function initSocket(app: FastifyInstance){
 
             if (!driver?.current_route_id) return "Driver is not assign to one route. Please assign one route first";
 
-            //Atualizar estado da rota
 
+
+            //Atualizar estado da rota-------------------------------------
             const routeId =  driver?.current_route_id;
             routeLocationState[routeId]={
                 source: "driver",
@@ -98,6 +154,8 @@ export function initSocket(app: FastifyInstance){
                 lastUpdate: Date.now(),
                 sourceName: driver.full_name
             };
+            //----------------------------------------------------------------
+
 
             await prisma.driverCoordinates.upsert({
                 where: {id_driver: id_driver},
@@ -113,9 +171,83 @@ export function initSocket(app: FastifyInstance){
                 id_driver,
                 lat,
                 long,
-                routeId: driver.current_route_id
+                routeId: driver.current_route_id,
+                driverName: driver.full_name
             });
         });
+
+
+
+
+
+
+
+
+
+
+
+        /**
+         * Cadete transmitindo localizacao
+         */
+
+        socket.on("cadete:updateLocation", async (data) =>{
+            const {cadeteId, lat, long, sourceName} = data;
+
+            const cadete = await prisma.cadetes.findUnique({
+                where: {id: cadeteId},
+                include:{
+                    stop:{
+                        include:{
+                            route: true
+                        }
+                    }
+                }
+            });
+
+            const routeId = cadete?.stop?.route?.id;
+            if (!routeId) return `routeId: ${routeId} does not exists.`;
+
+            // Verifica se o motorista esta activo
+
+            if (isDriveActive(routeId)) return "Motorista está ativo nesta rota, Obrigado pela sua contribuição";
+
+            routeLocationState[routeId] = {
+                source: "cadete",
+                sourceId: cadeteId,
+                lastUpdate: Date.now(),
+                sourceName: cadete.full_name
+            };
+
+            io.to(`route_${routeId}`).emit("transport:location",{
+                cadeteId,
+                lat,
+                long,
+                source: "cadete",
+                routeId: cadete.stop?.route.id,
+                cadeteName:cadete.full_name
+            });
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         //Desconectar socket
